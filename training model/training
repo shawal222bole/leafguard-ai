@@ -1,0 +1,195 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "5ce1e8c6-8cbc-4f64-a0f5-0a4f5f14da99",
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "ModuleNotFoundError",
+     "evalue": "No module named 'matplotlib'",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[31m---------------------------------------------------------------------------\u001b[39m",
+      "\u001b[31mModuleNotFoundError\u001b[39m                       Traceback (most recent call last)",
+      "\u001b[36mCell\u001b[39m\u001b[36m \u001b[39m\u001b[32mIn[1]\u001b[39m\u001b[32m, line 3\u001b[39m\n\u001b[32m      1\u001b[39m \u001b[38;5;28;01mimport\u001b[39;00m tensorflow \u001b[38;5;28;01mas\u001b[39;00m tf\n\u001b[32m      2\u001b[39m \u001b[38;5;28;01mfrom\u001b[39;00m tensorflow.keras \u001b[38;5;28;01mimport\u001b[39;00m models, layers\n\u001b[32m----> \u001b[39m\u001b[32m3\u001b[39m \u001b[38;5;28;01mimport\u001b[39;00m matplotlib.pyplot \u001b[38;5;28;01mas\u001b[39;00m plt\n",
+      "\u001b[31mModuleNotFoundError\u001b[39m: No module named 'matplotlib'"
+     ]
+    }
+   ],
+   "source": [
+    "import tensorflow as tf \n",
+    "from tensorflow.keras import models, layers\n",
+    "import matplotlib.pyplot as plt\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "id": "2541e781-1a73-409b-8fdb-6854fe3aa746",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Requirement already satisfied: matplotlib in c:\\users\\majid\\appdata\\local\\programs\\python\\python313\\lib\\site-packages (3.11.0)\n",
+      "Requirement already satisfied: contourpy>=1.0.1 in c:\\users\\majid\\appdata\\local\\programs\\python\\python313\\lib\\site-packages (from matplotlib) (1.3.3)\n",
+      "Requirement already satisfied: cycler>=0.10 in c:\\users\\majid\\appdata\\local\\programs\\python\\python313\\lib\\site-packages (from matplotlib) (0.12.1)\n",
+      "Requirement already satisfied: fonttools>=4.22.0 in c:\\users\\majid\\appdata\\local\\programs\\python\\python313\\lib\\site-packages (from matplotlib) (4.63.0)\n",
+      "Requirement already satisfied: kiwisolver>=1.3.1 in c:\\users\\majid\\appdata\\local\\programs\\python\\python313\\lib\\site-packages (from matplotlib) (1.5.0)\n",
+      "Requirement already satisfied: numpy>=1.25 in c:\\users\\majid\\appdata\\local\\programs\\python\\python313\\lib\\site-packages (from matplotlib) (2.4.6)\n",
+      "Requirement already satisfied: packaging>=20.0 in c:\\users\\majid\\appdata\\local\\programs\\python\\python313\\lib\\site-packages (from matplotlib) (26.2)\n",
+      "Requirement already satisfied: pillow>=9 in c:\\users\\majid\\appdata\\local\\programs\\python\\python313\\lib\\site-packages (from matplotlib) (12.2.0)\n",
+      "Requirement already satisfied: pyparsing>=3 in c:\\users\\majid\\appdata\\local\\programs\\python\\python313\\lib\\site-packages (from matplotlib) (3.3.2)\n",
+      "Requirement already satisfied: python-dateutil>=2.7 in c:\\users\\majid\\appdata\\local\\programs\\python\\python313\\lib\\site-packages (from matplotlib) (2.9.0.post0)\n",
+      "Requirement already satisfied: six>=1.5 in c:\\users\\majid\\appdata\\local\\programs\\python\\python313\\lib\\site-packages (from python-dateutil>=2.7->matplotlib) (1.17.0)\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "[notice] A new release of pip is available: 24.3.1 -> 26.1.2\n",
+      "[notice] To update, run: python.exe -m pip install --upgrade pip\n"
+     ]
+    }
+   ],
+   "source": [
+    "!pip install matplotlib"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "id": "e1ada55d-a34b-4b9d-a7a4-7c4c51ec50a9",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "IMAGE_SIZE = 256\n",
+    "BATCH_SIZE = 32\n",
+    "CHANNELS=3\n",
+    "EPOCHS=50"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "4b692a80-35df-47bf-883c-f7d1938615cf",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Found 2152 files belonging to 3 classes.\n"
+     ]
+    }
+   ],
+   "source": [
+    "dataset = tf.keras.utils.image_dataset_from_directory(\n",
+    "    \"PlantVillage\",\n",
+    "    shuffle=True,\n",
+    "    image_size = (IMAGE_SIZE,IMAGE_SIZE),\n",
+    "    batch_size = BATCH_SIZE\n",
+    "    \n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "3f5edb68-e023-4bda-b20a-3033d8c27d3e",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "['Potato___Early_blight', 'Potato___Late_blight', 'Potato___healthy']"
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "class_names = dataset.class_names\n",
+    "class_names"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "258af132-78db-437f-af98-ab3c94a84c28",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "id": "131bc622-175c-42ed-a822-02a0ece37b09",
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "NameError",
+     "evalue": "name 'plt' is not defined",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[31m---------------------------------------------------------------------------\u001b[39m",
+      "\u001b[31mNameError\u001b[39m                                 Traceback (most recent call last)",
+      "\u001b[36mCell\u001b[39m\u001b[36m \u001b[39m\u001b[32mIn[18]\u001b[39m\u001b[32m, line 1\u001b[39m\n\u001b[32m----> \u001b[39m\u001b[32m1\u001b[39m plt.figure(figsize=(\u001b[32m10\u001b[39m, \u001b[32m10\u001b[39m))\n\u001b[32m      2\u001b[39m \n\u001b[32m      3\u001b[39m \u001b[38;5;28;01mfor\u001b[39;00m image_batch, labels_batch \u001b[38;5;28;01min\u001b[39;00m dataset.take(\u001b[32m1\u001b[39m):\n\u001b[32m      4\u001b[39m     print(image_batch.shape)\n",
+      "\u001b[31mNameError\u001b[39m: name 'plt' is not defined"
+     ]
+    }
+   ],
+   "source": [
+    "plt.figure(figsize=(10, 10))\n",
+    "\n",
+    "for image_batch, labels_batch in dataset.take(1):\n",
+    "    print(image_batch.shape)\n",
+    "    print(labels_batch.numpy())\n",
+    "\n",
+    "    for i in range(min(12, image_batch.shape[0])):\n",
+    "        ax = plt.subplot(3, 4, i + 1)\n",
+    "        plt.imshow(image_batch[i].numpy().astype(\"uint8\"))\n",
+    "        plt.title(class_names[int(labels_batch[i].numpy())])\n",
+    "        plt.axis(\"off\")\n",
+    "\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "df1b9593-34e4-4967-9062-7d472ed5253d",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.13.2"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
