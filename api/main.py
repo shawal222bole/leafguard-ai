@@ -1,25 +1,29 @@
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-import tensorflow as tf
+from keras.models import load_model
 import numpy as np
 from PIL import Image
 import io
+import os
 
 app = FastAPI()
 
-# ✅ CORS FIX (VERY IMPORTANT)
+# ✅ CORS (allow frontend access)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # allow frontend access
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ✅ Load your trained model
-MODEL = tf.keras.models.load_model("../saved_models/my_model.keras")
+# ✅ FIX MODEL PATH (important for Render)
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "saved_models", "my_model.keras")
 
-# ✅ Class names (change if needed)
+# ✅ Load model safely
+MODEL = load_model(MODEL_PATH)
+
+# ✅ Class names
 CLASS_NAMES = ["Early Blight", "Late Blight", "Healthy"]
 
 # ✅ Prediction API
@@ -27,7 +31,8 @@ CLASS_NAMES = ["Early Blight", "Late Blight", "Healthy"]
 async def predict(file: UploadFile = File(...)):
     image = await file.read()
 
-    image = Image.open(io.BytesIO(image)).resize((256, 256))
+    image = Image.open(io.BytesIO(image)).convert("RGB")
+    image = image.resize((256, 256))
     image = np.array(image) / 255.0
     image = np.expand_dims(image, axis=0)
 
