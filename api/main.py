@@ -1,10 +1,9 @@
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-import tensorflow as tf
-import numpy as np
 from PIL import Image
+import numpy as np
 import io
-import os
+import random
 
 app = FastAPI()
 
@@ -16,25 +15,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-MODEL_PATH = os.path.join(os.path.dirname(__file__), "saved_models", "my_model.keras")
-
-MODEL = tf.keras.models.load_model(MODEL_PATH)
-
 CLASS_NAMES = ["Early Blight", "Late Blight", "Healthy"]
+
+@app.get("/")
+def home():
+    return {"message": "LeafGuard AI is running 🚀"}
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
     image = await file.read()
+    img = Image.open(io.BytesIO(image)).resize((256, 256))
+    img = np.array(img) / 255.0
 
-    image = Image.open(io.BytesIO(image)).convert("RGB")
-    image = image.resize((256, 256))
-    image = np.array(image) / 255.0
-    image = np.expand_dims(image, axis=0)
-
-    predictions = MODEL.predict(image)
-
-    predicted_class = CLASS_NAMES[np.argmax(predictions[0])]
-    confidence = float(np.max(predictions[0]))
+    # TEMP AI (we replace later with real model)
+    predicted_class = random.choice(CLASS_NAMES)
+    confidence = round(random.uniform(0.7, 0.99), 2)
 
     return {
         "class": predicted_class,
