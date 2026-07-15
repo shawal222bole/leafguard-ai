@@ -162,7 +162,7 @@ function ImageUpload() {
     try {
       setError(null);
       const res = await axios.post(
-        "http://127.0.0.1:8000/predict",
+        "https://leafguard-ai-34bj.onrender.com/predict",
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
